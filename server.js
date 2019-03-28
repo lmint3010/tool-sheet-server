@@ -7,11 +7,11 @@ const cors = require('cors')
 
 app.use(cors())
 
-// Express Config
-app.use(express.static(path.join(__dirname, 'build')))
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
+// // Express Config
+// app.use(express.static(path.join(__dirname, 'build')))
+// app.get('/', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'))
+// })
 
 // SETUP: Body-Parser
 const { json, urlencoded } = require('body-parser')
