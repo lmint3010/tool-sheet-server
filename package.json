@@ -4,8 +4,7 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
-    "test": "mocha --timeout 10000"
+    "start": "node server.js"
   },
   "engines": {
     "yarn": "1.13.0"
