@@ -13,6 +13,8 @@ app.use(cors())
 //   res.sendFile(path.join(__dirname, 'build', 'index.html'))
 // })
 
+app.get('/', (req, res) => res.send('Server is running'))
+
 // SETUP: Body-Parser
 const { json, urlencoded } = require('body-parser')
 app.use(json())
