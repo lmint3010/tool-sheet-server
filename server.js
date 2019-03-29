@@ -21,7 +21,7 @@ app.use(json())
 app.use(urlencoded({ extended: false }))
 
 // SETUP: Mongoose
-const dbUrl = require('./config').mongo.db_test
+const dbUrl = require('./config').mongo.db_real
 require('./utils/mongoose').connect(dbUrl)
 
 // IMPORT: Routes
