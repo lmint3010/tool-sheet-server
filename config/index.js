@@ -1,7 +1,7 @@
+// Atlas user: thong.lu@dfo.global
 const mongo = {
   db_real:
-    // 'mongodb+srv://lmint:Taokobiet123@dfo-data-entry-f2qo2.gcp.mongodb.net/storage?retryWrites=true',
-    'mongodb+srv://lmint:Taokobiet123@cluster0-l9cgs.gcp.mongodb.net/Devorum?retryWrites=true',
+    'mongodb+srv://lmint:Taokobiet@123@dfo-h5hz5.gcp.mongodb.net/toolsheet?retryWrites=true',
   db_test: 'mongodb://localhost/sheet_tool',
   options: {
     useNewUrlParser: true,
