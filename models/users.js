@@ -1,30 +1,30 @@
 const { Schema, model } = require('../utils/mongoose').mongoose
 
-const teamPwdSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   avatar: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   google_token: {
-    access_token : String,
-    refresh_token : String,
-    scope : String,
-    token_type : String,
-    expiry_date : String
-  }
+    access_token: String,
+    refresh_token: String,
+    scope: String,
+    token_type: String,
+    expiry_date: String,
+  },
 })
 
-module.exports = model('users', teamPwdSchema, 'users')
+module.exports = model('users', userSchema, 'users')

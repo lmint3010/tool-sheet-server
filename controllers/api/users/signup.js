@@ -28,7 +28,13 @@ const signup = async (req, res) => {
       email,
       avatar,
       password: `${hashedPassword}`,
-      google_token: null,
+      google_token: {
+        access_token: '',
+        refresh_token: '',
+        scope: '',
+        token_type: '',
+        expiry_date: '',
+      },
     })
     try {
       const savedUser = await newUser.save()
