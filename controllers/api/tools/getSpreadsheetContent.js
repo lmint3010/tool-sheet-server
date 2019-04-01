@@ -3,12 +3,11 @@ const { authorize } = require('../../../controllers/api/auth/authCTL')
 const { saveContentsOnSheet } = require('../../../functions/spreadsheet')
 const momentzone = require('moment-timezone')
 // Model
-const { spreadsheets } = require('../../../models')
+const { spreadsheets, users } = require('../../../models')
 
 /** Receive spreadsheet ID and Fetch all content into this sheet */
 const getSpreadsheetContent = async (req, res) => {
   const { spreadsheetId, userId } = req.body
-
   // Request Google to get subinfo about that sheet
   const auth = await authorize(userId) // Receive verify JSON Url of Auth object
   if (auth.isAuth) {
@@ -20,6 +19,8 @@ const getSpreadsheetContent = async (req, res) => {
       const { sheets: sheetList, alias } = await spreadsheets
         .findOne({ spreadsheetId })
         .lean()
+
+      const user = await users.findOne({ _id: userId }).lean()
 
       Promise.all(
         sheetList.map(async sheet => {
@@ -44,6 +45,7 @@ const getSpreadsheetContent = async (req, res) => {
           { spreadsheetId },
           {
             $set: {
+              creator: user.name,
               updated: momentzone(Date.now())
                 .tz('Asia/Ho_Chi_Minh')
                 .format(),
