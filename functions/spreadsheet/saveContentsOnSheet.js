@@ -1,10 +1,10 @@
 const { formatSheetContent } = require('./formatSheetContent')
-const uniqid = require('uniqid')
 const { isEmpty } = require('../../validation')
 const strEnzime = require('../../functions/pure/strEnzime')
+const compare2Object = require('../../functions/pure/compare2Object')
 
 // Models import
-const { english, translate, needupdate } = require('../../models').languages
+const { translation_model } = require('../../models')
 
 /** Receive sheetContent and Save to mongoDB
  * @param {Array} content Array contain sheet content get by Google API.
@@ -12,98 +12,55 @@ const { english, translate, needupdate } = require('../../models').languages
  * @param {String} currentSheet Name of current sheet
  */
 const saveContentsOnSheet = async (content, siteAlias, currentSheet) => {
-  const sheetContent = formatSheetContent(content)
+  let sheetContent = formatSheetContent(content)
   const languageList = sheetContent.shift()
 
-  sheetContent.forEach(async row => {
-    // Verify empty case of English version
-    if (isEmpty(row[0])) {
-      console.log('English content is empty')
-      return
-    }
+  Promise.all(
+    sheetContent.map(async row => {
+      // Step 1: Checkout _blank english document
+      if (isEmpty(row[0])) return
 
-    let uid = uniqid()
-    // Create English Document
-    const ENDoc = new english({
-      uid,
-      site: siteAlias,
-      sheet: currentSheet,
-      code: 'EN',
-      content: row[0],
-      enzime: strEnzime(row[0].toLowerCase()),
-    })
+      // Step 2: Create new translated sub-document
+      let newTranslated = {}
+      // Loop on the row to map data to newTranslated
+      for (let i = 1; i < row.length; i++) {
+        const code = languageList[i].toLowerCase()
 
-    try {
-      // Save new english document
-      const savedEN = await ENDoc.save()
-      // console.log('Saved_en:', savedEN)
-    } catch (err) {
-      if (err.code === 11000) {
-        // If english version existed
-        const enzime = strEnzime(row[0].toLowerCase())
-        const existEnglish = await english.findOne({ enzime }).lean()
-        uid = existEnglish.uid // Re-assign uid (use existed uid)
-        // console.log('English version has been existed with uid:', uid)
+        // Get over if document is empty
+        if (isEmpty(row[i])) continue
+        else newTranslated[code] = row[i]
       }
-    }
 
-    // Loop to resolve all other translated documents
-    for (let i = 1; i < row.length; i++) {
-      const newDoc = new translate({
-        uid,
-        site: siteAlias,
+      // Step 3: Verify existed english document on sheet
+      const existedEnglish = await translation_model.findOne({
+        text: row[0],
         sheet: currentSheet,
-        code: languageList[i].toLowerCase(),
-        content: row[i],
+        site: siteAlias,
       })
 
-      // Check content already existed in database yet?
-      const existed = await translate
-        .findOne({ code: languageList[i], uid })
-        .lean()
-      if (existed) {
-        // If content existed ?
-        // Gross away document if incomming content is empty
-        if (row[i].trim() === '') {
-          continue
-        }
-        // Push Update translated content if has different point
-        if (existed.content !== row[i]) {
-          const newUpdate = new needupdate({
-            uid,
-            code: languageList[i],
-            site: siteAlias,
-            english: row[0],
-            oldcontent: existed.content,
-            newcontent: row[i],
+      // Step 4: Handle exsited english document on sheet
+      if (existedEnglish) {
+        // Content will be update if has different point?
+        if (!compare2Object(newTranslated, existedEnglish.translated)) {
+          await translation_model.findByIdAndUpdate(existedEnglish._id, {
+            $set: { translated: newTranslated },
           })
-
-          try {
-            // Push need update document to database "needupdate"
-            const pushedUpdate = await newUpdate.save()
-            // console.log('Pushed new update:', pushedUpdate)
-          } catch (err) {
-            if (err.code === 11000)
-              console.log('Prevented push duplicate update')
-            else console.log('Fail to updated translated content:', err)
-          }
         }
-      } else if (isEmpty(row[i])) {
-        // If content doesn't exist before? -> Validate Empty
-        console.log('Translate is empty', newDoc)
-        continue
+      } else {
+        // Create new document and save it
+        const enzime = strEnzime(row[0].toLowerCase().trim())
+        newEnglishDocument = new translation_model({
+          site: siteAlias,
+          sheet: currentSheet,
+          text: row[0],
+          enzime,
+          translated: newTranslated,
+        })
+        await newEnglishDocument.save()
       }
-
-      try {
-        // Verify and save new translated document
-        const savedTranslate = await newDoc.save()
-        console.log('Saved_nw:', savedTranslate)
-      } catch (err) {
-        err.code === 11000 &&
-          console.log('Translation has been existed:', newDoc)
-      }
-    } // End of for loop
-  })
+      // --- Version 11 ---
+    }) // End map loop
+  )
 }
 
 module.exports = saveContentsOnSheet
