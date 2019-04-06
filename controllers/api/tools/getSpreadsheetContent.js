@@ -23,9 +23,9 @@ const getSpreadsheetContent = async (req, res) => {
         .lean()
 
       // Get user information from database
-      const user = await users.findOne({ _id: userId }).lean()
+      const user = await users.findById(userId).lean()
 
-      Promise.all(
+      await Promise.all(
         sheetList.map(async sheet => {
           // Fetch data in one sheet
           const {
@@ -40,32 +40,33 @@ const getSpreadsheetContent = async (req, res) => {
             await saveContentsOnSheet(sheetContent, alias, sheet.title)
           } catch (err) {
             console.log('Error with sheet:', sheet.title)
-            return
+            throw(err)
           } // End try catch
         })
-      ).then(async () => {
-        // Handle if promise.all resolved
-        await spreadsheets.findOneAndUpdate(
-          { spreadsheetId },
-          {
-            $set: {
-              creator: user.name,
-              updated: momentzone(Date.now())
-                .tz('Asia/Ho_Chi_Minh')
-                .format(),
-            },
-          }
-        )
-        res.json({ success: true })
-      })
-    } catch (errors) {
+      )
+
+      // Handle if promise.all resolved
+      await spreadsheets.findOneAndUpdate(
+        { spreadsheetId },
+        {
+          $set: {
+            creator: user.name,
+            updated: momentzone(Date.now())
+              .tz('Asia/Ho_Chi_Minh')
+              .format(),
+          },
+        }
+      )
+      return res.json({ success: true })
       // Or if promise.all rejected
+
+    } catch (errors) {
       return res.status(400).json({ success: false, errors })
     }
-  } else {
-    // If user unauthorized
-    return res.status(400).json({ success: false, verifyUri: auth.data })
   }
+
+  // If user unauthorized
+  return res.status(400).json({ success: false, verifyUri: auth.data })
 }
 
 module.exports = { getSpreadsheetContent }

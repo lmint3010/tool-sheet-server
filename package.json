@@ -8,7 +8,7 @@
     "ndoe": "10.14.2"
   },
   "engines": {
-    "yarn": "1.13.0"
+    "yarn": "^1.13.0"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",

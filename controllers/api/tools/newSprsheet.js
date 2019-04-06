@@ -12,6 +12,7 @@ const validator = require('validator')
 /** Create new spreadsheet instance and save to mongoDB
  * @param {Object} sprsheetInfo The Spreadsheet object responsed from Google Service
  * @param {String} alias Alias name for spreadsheet (Submit by Client)
+ * @param {String} username
  */
 const createAndSave = async (sprsheetInfo, alias, username) => {
   const {
@@ -53,34 +54,40 @@ const newSprsheet = async (req, res) => {
   const { sprsheetUri, alias, userId } = req.body
 
   // Validate Url
-  if (isEmpty(sprsheetUri))
+  if (isEmpty(sprsheetUri)) {
     return res.status(400).json({
       saved: false,
       errors: 'Please enter the Google Spreadsheet URL',
     })
+  }
+
   if (
     !validator.isURL(sprsheetUri) ||
     !/https:\/\/docs\.google\.com/g.test(sprsheetUri)
-  )
+  ) {
     return res.status(400).json({
       saved: false,
       errors: 'Google Spreadsheet URL is not valid',
     })
+  }
 
   // Validate alias
-  if (isEmpty(alias))
+  if (isEmpty(alias)) {
     return res.status(400).json({
       saved: false,
       errors: 'Please enter the alias for this spreadsheet',
     })
+  }
+
   const duplicatedAlias = await spreadsheets.findOne({
     alias: alias.toLowerCase(),
   })
-  if (duplicatedAlias)
+  if (duplicatedAlias) {
     return res.status(400).json({
       saved: false,
       errors: 'Alias name has been exists',
     })
+  }
 
   // Parse url to get spreadsheet Id
   const sprsheetIdRegex = /[\w-]{14,}/g
@@ -89,10 +96,9 @@ const newSprsheet = async (req, res) => {
   // Check duplicated spreadsheet in Database
   const duplicated = await spreadsheets.findOne({ spreadsheetId })
   if (duplicated) {
-    const { creator } = duplicated
     return res.status(400).json({
       saved: false,
-      errors: `This spreadsheet has been created by <${creator}>`,
+      errors: `This spreadsheet has been created by <${duplicated.creator}>`,
     })
   }
 
@@ -110,9 +116,9 @@ const newSprsheet = async (req, res) => {
     } catch (err) {
       return res.status(400).json({ saved: false, errors: err })
     }
-  } else {
-    return res.status(401).json({ saved: false, verifyUri: auth.data })
   }
+
+  return res.status(401).json({ saved: false, verifyUri: auth.data })
 }
 
 module.exports = { newSprsheet }

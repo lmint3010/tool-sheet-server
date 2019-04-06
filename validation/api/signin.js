@@ -5,17 +5,21 @@ module.exports = body => {
   const { email, password } = body
   let errors = {}
 
-  if(!email)
+  if(!email) {
     errors.email = 'Please enter your email'
+  }
 
-  if(!password)
+  if(!password) {
     errors.password = 'Please enter your password'
+  }
 
-  if(!isEmpty(errors))
+  if(!isEmpty(errors)) {
     return { isValid: false, errors }
+  }
 
-  if(!validator.isEmail(email))
+  if(!validator.isEmail(email)) {
     errors.email = 'Your email is not valid'
+  }
 
   return {
     errors,

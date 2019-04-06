@@ -1,10 +1,11 @@
-const { spreadsheets, users } = require('../../../models')
+const { spreadsheets } = require('../../../models')
 const { google } = require('googleapis')
 const { authorize } = require('../auth/authCTL')
 
 // Utils
 const momentzone = require('moment-timezone')
 
+// TODO: Please rename to camelCase syncInfo
 const syncinfo = async (req, res) => {
   // Data submited from client
   const { spreadsheetIdFromUser, username, userId, id } = req.body
@@ -52,9 +53,9 @@ const syncinfo = async (req, res) => {
     } catch (err) {
       return res.status(400).json({ updated: false, errors: err })
     }
-  } else {
-    return res.status(401).json({ updated: false, verifyUri: auth.data })
   }
+
+  return res.status(401).json({ updated: false, verifyUri: auth.data })
 }
 
 module.exports = { syncinfo }

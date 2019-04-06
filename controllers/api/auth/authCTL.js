@@ -20,15 +20,7 @@ const getOAuth2Client = async () => {
 }
 
 /** Token validation */
-const isValidToken = token => {
-  // Token doesn't exist
-  if (isEmpty(token)) {
-    return false
-  } else {
-    // Expired token
-    return Number(token.expiry_date) < Date.now() ? false : true
-  }
-}
+const isValidToken = token => !isEmpty(token) && Number(token.expiry_date) >= Date.now()
 
 /**
  * Google Authorization Controller

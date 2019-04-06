@@ -11,7 +11,9 @@ const validator = require('../../../validation/api/signup')
 const signup = async (req, res) => {
   // Validate user submit data
   const { isValid, errors } = validator(req.body)
-  if (!isValid) return res.status(400).json({ errors })
+  if (!isValid) {
+    return res.status(400).json({ errors })
+  }
 
   const { email, name, password } = req.body
 
@@ -40,7 +42,9 @@ const signup = async (req, res) => {
       const savedUser = await newUser.save()
       res.json(savedUser)
     } catch (err) {
-      if (err.code === 11000) errors.email = 'This email has been existed'
+      if (err.code === 11000) {
+        errors.email = 'This email has been existed'
+      }
       return res.status(400).json({ errors })
     }
   } catch (err) {

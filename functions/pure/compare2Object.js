@@ -10,16 +10,16 @@ const compare = (one, two) => {
   const keysTwo = Object.keys(two)
 
   // Compare keys
-  const keysDiff = keysOne.filter(e => !keysTwo.includes(e)).length
+  const keysDiff = keysOne.some(key => keysTwo.includes(key))
 
   // Get all value of both object
   const valuesOne = Object.values(one).map(e => e.toLowerCase().trim())
   const valuesTwo = Object.values(two).map(e => e.toLowerCase().trim())
 
   //Compare values
-  const valuesDiff = valuesOne.filter(e => !valuesTwo.includes(e)).length
+  const valuesDiff = valuesOne.some(e => valuesTwo.includes(e))
 
-  return keysDiff === 0 && valuesDiff === 0
+  return keysDiff && valuesDiff;
 }
 
 module.exports = compare

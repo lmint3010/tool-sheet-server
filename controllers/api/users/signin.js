@@ -10,8 +10,9 @@ const validator = require('../../../validation/api/signin')
 const signin = async (req, res) => {
   // Validate user submit data
   const { isValid, errors } = validator(req.body)
-  if(!isValid)
+  if(!isValid) {
     return res.status(400).json({ errors })
+  }
 
   const { email, password } = req.body
 
@@ -19,13 +20,15 @@ const signin = async (req, res) => {
   const user = await users.findOne({ email }).lean()
 
   // Sign In Fail - Email not found
-  if(!user)
+  if(!user) {
     return res.status(404).json({ errors: { email: 'User not found!' }})
+  }
 
   // Sign In Fail - Password is not correct
   const passwordMatch = await bcrypt.compare(password, user.password)
-  if(!passwordMatch)
+  if(!passwordMatch) {
     return res.status(400).json({ errors: { password: 'Email or password is not correct'}})
+  }
 
   // Sign In Success
   // Generate JWT bearer token for user

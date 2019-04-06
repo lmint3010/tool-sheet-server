@@ -10,7 +10,9 @@ const setToken = async (req, res) => {
   const auth = await getOAuth2Client()
 
   auth.getToken(code, async (err, token) => {
-    if(err) return res.status(400).json({ success: false, errors: 'Fail to get Token from Google' })
+    if(err) {
+      return res.status(400).json({ success: false, errors: 'Fail to get Token from Google' })
+    }
     const userdata = await users.findById(userId)
 
     // Update if user existed
@@ -21,7 +23,8 @@ const setToken = async (req, res) => {
       )
       return res.json({ success: true, errors: null })
     }
-    res.status(400).json({ success: false, errors: 'User not found'})
+
+    return res.status(400).json({ success: false, errors: 'User not found'})
   })
 }
 

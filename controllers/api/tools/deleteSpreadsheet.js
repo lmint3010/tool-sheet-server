@@ -9,16 +9,15 @@ const deleteSpreadsheet = async (req, res) => {
   const { alias: site } = await spreadsheets.findById(spreadsheetId)
 
   try {
-    // Delete all english documents related
-    await languages.english.deleteMany({ site })
-
-    // Delete all translate documents related
-    await languages.translate.deleteMany({ site })
-
-    // Delete all update content related
-    await languages.needupdate.deleteMany({ site })
-
-    await spreadsheets.findByIdAndDelete(spreadsheetId)
+    await Promise.all([
+      // Delete all english documents related
+      languages.english.deleteMany({ site }),
+      // Delete all translate documents related
+      languages.translate.deleteMany({ site }),
+      // Delete all update content related
+      languages.needupdate.deleteMany({ site }),
+      spreadsheets.findByIdAndDelete(spreadsheetId)
+    ])
     res.json({ deleted: true, errors: null })
   } catch (err) {
     res.status(400).json({

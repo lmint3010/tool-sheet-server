@@ -15,10 +15,12 @@ const saveContentsOnSheet = async (content, siteAlias, currentSheet) => {
   let sheetContent = formatSheetContent(content)
   const languageList = sheetContent.shift()
 
-  Promise.all(
+  return Promise.all(
     sheetContent.map(async row => {
       // Step 1: Checkout _blank english document
-      if (isEmpty(row[0])) return
+      if (isEmpty(row[0])) {
+        return;
+      }
 
       // Step 2: Create new translated sub-document
       let newTranslated = {}
@@ -27,8 +29,9 @@ const saveContentsOnSheet = async (content, siteAlias, currentSheet) => {
         const code = languageList[i].toLowerCase()
 
         // Get over if document is empty
-        if (isEmpty(row[i])) continue
-        else newTranslated[code] = row[i]
+        if (!isEmpty(row[i])) {
+          newTranslated[code] = row[i]
+        }
       }
 
       // Step 3: Verify existed english document on sheet
@@ -39,25 +42,23 @@ const saveContentsOnSheet = async (content, siteAlias, currentSheet) => {
       })
 
       // Step 4: Handle exsited english document on sheet
-      if (existedEnglish) {
+      if (existedEnglish && !compare2Object(newTranslated, existedEnglish.translated)) {
         // Content will be update if has different point?
-        if (!compare2Object(newTranslated, existedEnglish.translated)) {
-          await translation_model.findByIdAndUpdate(existedEnglish._id, {
-            $set: { translated: newTranslated },
-          })
-        }
-      } else {
-        // Create new document and save it
-        const enzime = strEnzime(row[0].toLowerCase().trim())
-        newEnglishDocument = new translation_model({
-          site: siteAlias,
-          sheet: currentSheet,
-          text: row[0],
-          enzime,
-          translated: newTranslated,
+        return translation_model.findByIdAndUpdate(existedEnglish._id, {
+          $set: { translated: newTranslated },
         })
-        await newEnglishDocument.save()
       }
+
+      // Create new document and save it
+      const enzime = strEnzime(row[0].toLowerCase().trim())
+      const newEnglishDocument = new translation_model({
+        site: siteAlias,
+        sheet: currentSheet,
+        text: row[0],
+        enzime,
+        translated: newTranslated,
+      })
+      return newEnglishDocument.save()
       // --- Version 11 ---
     }) // End map loop
   )

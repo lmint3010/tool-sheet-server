@@ -10,7 +10,9 @@ const search = async (req, res) => {
   // Find all english docs match search case
   const results = await translation_model.find({ enzime: enzimeRegExp }).lean()
 
-  if (isEmpty(results)) return res.json({ status: false })
+  if (isEmpty(results)) {
+    return res.json({ status: false })
+  }
 
   const searchResults = results.map(({ site, sheet, text, translated }) => ({
     text,
