@@ -27,7 +27,6 @@ const getSpreadsheetContent = async (req, res) => {
 
       Promise.all(
         sheetList.map(async sheet => {
-          // Loop through sheetList and Fetch data of each sheet
           // Fetch data in one sheet
           const {
             // sheetContent is all data in single sheet

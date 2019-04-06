@@ -3,7 +3,7 @@ module.exports = {
   users: require('./users'),
   spreadsheets: require('./spreadsheets'),
   languages: {
-    // english: require('./languages/english'),
+    english: require('./languages/english'),
     translate: require('./languages/translate'),
     needupdate: require('./languages/needUpdate'),
   },
