@@ -1,4 +1,4 @@
-const { spreadsheets, languages } = require('../../../models')
+const { spreadsheets, translation_model } = require('../../../models')
 
 /** When user send SpreadsheetId
  * TODO: Find that spreadsheet in Database -> Delete it
@@ -8,22 +8,15 @@ const deleteSpreadsheet = async (req, res) => {
   const { spreadsheetId } = req.body
   const { alias: site } = await spreadsheets.findById(spreadsheetId)
 
+  // Delete all english documents related
   try {
-    // Delete all english documents related
-    await languages.english.deleteMany({ site })
-
-    // Delete all translate documents related
-    await languages.translate.deleteMany({ site })
-
-    // Delete all update content related
-    await languages.needupdate.deleteMany({ site })
-
+    await translation_model.deleteMany({ site })
     await spreadsheets.findByIdAndDelete(spreadsheetId)
-    res.json({ deleted: true, errors: null })
+    res.json({ deleted: true })
   } catch (err) {
     res.status(400).json({
-      err,
       deleted: false,
+      err,
     })
   }
 }

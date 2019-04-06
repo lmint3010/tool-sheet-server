@@ -3,6 +3,7 @@ const { authCTL } = require('./auth/authCTL')
 const { setToken } = require('./auth/setToken')
 const { signup } = require('./users/signup')
 const { signin } = require('./users/signin')
+const { getall } = require('./users/all')
 
 // Spreadsheet API
 const { getSpreadsheetContent } = require('./tools/getSpreadsheetContent')
@@ -26,5 +27,6 @@ module.exports = {
   users: {
     signup,
     signin,
+    getall,
   },
 }
