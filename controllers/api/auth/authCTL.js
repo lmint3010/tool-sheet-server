@@ -1,20 +1,19 @@
-const { credentials, users } = require('../../../models')
+const { users } = require('../../../models')
 const { isEmpty } = require('../../../validation')
 const { google } = require('googleapis')
 const {
   authenticate: { SCOPES },
+  credentials: creds,
 } = require('../../../config/index')
 
 /** Get oAuth2Client created from local credentials */
 const getOAuth2Client = async () => {
-  const creds = await credentials.findOne({ user: 'lmint3010' })
   const { client_secret, client_id, redirect_uris } = creds.installed
   const oAuth2Client = new google.auth.OAuth2(
     client_id,
     client_secret,
     redirect_uris[0]
   )
-
   google.options({ auth: oAuth2Client })
   return oAuth2Client
 }
@@ -36,12 +35,11 @@ const authorize = async userId => {
     return { isAuth: true, data: auth, token }
   }
 
-  // Token is not valid
+  // Create new token
   const verifyUrl = auth.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES,
   })
-
   return { isAuth: false, data: verifyUrl, token: null }
 }
 
