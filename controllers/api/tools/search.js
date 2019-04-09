@@ -15,7 +15,7 @@ const search = async (req, res) => {
 
   const searchResults = results
     .reduce((arr, doc) => {
-      return (!doc.translated || !doc.translated[code]) ? arr : arr.concat({
+      return (!doc.translated || !doc.translated[code.toLowerCase()]) ? arr : arr.concat({
         text: doc.text,
         position: `${doc.site} | ${doc.sheet}`,
         translated: doc.translated[code.toLowerCase()],
