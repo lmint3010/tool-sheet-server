@@ -15,7 +15,7 @@ const saveContentsOnSheet = async (content, siteAlias, currentSheet) => {
   let sheetContent = formatSheetContent(content)
   const languageList = sheetContent.shift()
 
-  Promise.all(
+  await Promise.all(
     sheetContent.map(async row => {
       // Step 1: Checkout _blank english document
       if (isEmpty(row[0])) return
@@ -56,9 +56,12 @@ const saveContentsOnSheet = async (content, siteAlias, currentSheet) => {
           enzime,
           translated: newTranslated,
         })
-        await newEnglishDocument.save()
+        try {
+          await newEnglishDocument.save()
+        } catch (err) {
+          console.log(err)
+        }
       }
-      // --- Version 11 ---
     }) // End map loop
   )
 }

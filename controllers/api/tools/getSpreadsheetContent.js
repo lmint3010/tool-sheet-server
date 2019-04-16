@@ -3,15 +3,14 @@ const { authorize } = require('../../../controllers/api/auth/authCTL')
 const { saveContentsOnSheet } = require('../../../functions/spreadsheet')
 const momentzone = require('moment-timezone')
 // Model
-const { spreadsheets, users } = require('../../../models')
+const { spreadsheets, users, translation_model } = require('../../../models')
 
 /** Receive spreadsheet ID and Fetch all content into this sheet */
 const getSpreadsheetContent = async (req, res) => {
   const { spreadsheetId, userId } = req.body
-  // User authorization status
-  const auth = await authorize(userId) // Receive verify JSON Url of Auth object
+  // Receive verify JSON Url of Auth object
+  const auth = await authorize(userId)
 
-  // If user is authorized
   if (auth.isAuth) {
     const { data } = auth
     const sheets = google.sheets({ version: 'v4', auth: data })
@@ -44,12 +43,17 @@ const getSpreadsheetContent = async (req, res) => {
           } // End try catch
         })
       ).then(async () => {
-        // Handle if promise.all resolved
+        // Counter english documents
+        const englishCounter = await translation_model.countDocuments({
+          site: alias,
+        })
+
         await spreadsheets.findOneAndUpdate(
           { spreadsheetId },
           {
             $set: {
               creator: user.name,
+              totalEnglishDocs: englishCounter,
               updated: momentzone(Date.now())
                 .tz('Asia/Ho_Chi_Minh')
                 .format(),

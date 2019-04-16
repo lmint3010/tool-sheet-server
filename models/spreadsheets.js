@@ -3,40 +3,46 @@ const { Schema, model } = require('../utils/mongoose').mongoose
 const spreadsheetsSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   spreadsheetUrl: {
     type: String,
-    required: true
+    required: true,
   },
   spreadsheetId: {
     type: String,
-    required: true
+    required: true,
   },
   alias: {
     type: String,
-    required: true
+    required: true,
   },
   sheets: {
-    type: [{
-      sheetId: String,
-      title: String,
-      index: Number,
-      rowCount: Number,
-      columnCount: Number
-    }],
-    required: true
+    type: [
+      {
+        sheetId: String,
+        title: String,
+        index: Number,
+        rowCount: Number,
+        columnCount: Number,
+      },
+    ],
+    required: true,
   },
   updated: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
   creator: {
-    type: String
+    type: String,
   },
   lastEditor: {
     type: String,
-  }
+  },
+  totalEnglishDocs: {
+    type: Number,
+    default: 0,
+  },
 })
 
-module.exports = model('spreadsheets', spreadsheetsSchema, 'spreadsheets')
+module.exports = model('spreadsheet', spreadsheetsSchema)

@@ -1,37 +1,26 @@
 const port = process.env.PORT || 3000
-const express = require('express')
-const path = require('path')
-const app = express()
+const app = require('express')()
 const passport = require('passport')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 
+require('dotenv').config()
 app.use(cors())
 
-// // // Express Config
-// app.use(express.static(path.join(__dirname, 'build')))
-app.get('/', (req, res) => res.send('Server is running!'))
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-// SETUP: Body-Parser
-const { json, urlencoded } = require('body-parser')
-app.use(json())
-app.use(urlencoded({ extended: false }))
-
-// SETUP: Mongoose
-const dbUrl = require('./config').mongo.db_real
-require('./utils/mongoose').connect(dbUrl)
-
-// IMPORT: Routes
 const { auth, sprsheet, users } = require('./routes/api')
-
-// Passport JWT Authenticate Config
-app.use(passport.initialize())
-require('./utils/passport')(passport)
-
-// SETUP: Routes
 app.use('/api/auth', auth)
 app.use('/api/sprsheet', sprsheet)
 app.use('/api/users', users)
 
-app.listen(port)
+const mongoUri = process.env.MONGODB_URI_DEV
+require('./utils/mongoose').connect(mongoUri)
 
-module.exports = app // For testing
+app.use(passport.initialize())
+require('./utils/passport')(passport)
+
+app.listen(port, () => {
+  app.get('/', (_, res) => res.send(`Server is running!</br>PORT ${port}!`))
+})
