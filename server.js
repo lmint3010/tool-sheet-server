@@ -15,7 +15,7 @@ app.use('/api/auth', auth)
 app.use('/api/sprsheet', sprsheet)
 app.use('/api/users', users)
 
-const mongoUri = process.env.MONGODB_URI_DEV
+const mongoUri = process.env.MONGODB_URI_PRODUCTION
 require('./utils/mongoose').connect(mongoUri)
 
 app.use(passport.initialize())
