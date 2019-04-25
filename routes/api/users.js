@@ -1,17 +1,36 @@
 const route = require('express').Router()
 
-const { signup, signin, getall } = require('../../controllers/api').users
+const {
+  signup,
+  signin,
+  getall,
+  resetPassword,
+  renewPassword,
+  validResetToken,
+} = require('../../controllers/api').users
 
-// @path  POST /api/users/signup
-// @desc  Sign up feature
+// POST -> /api/users/signup
+// Sign up feature
 route.post('/signup', signup)
 
-// @path  POST /api/users/signin
-// @desc  Sign in feature
+// POST -> /api/users/signin
+// Sign in feature
 route.post('/signin', signin)
 
-// @path  POST /api/users/all
-// @desc  Get all user information
+// POST -> /api/users/all
+// Get all user information
 route.get('/all', getall)
+
+// POST -> /api/users/reset-password/
+// Receive user email and send reset link
+route.post('/reset-password/', resetPassword)
+
+// POST -> /api/users/renewpassword/
+// Receive user email and start to resetPassword
+route.post('/valid-resettoken', validResetToken)
+
+// POST -> /api/users/renewpassword/
+// Receive user email and start to resetPassword
+route.post('/renew-password/', renewPassword)
 
 module.exports = route

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "ndoe": "10.14.2"
+    "dev": "nodemon server.js"
   },
   "engines": {
     "yarn": "1.13.0"
@@ -15,14 +15,18 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^7.0.0",
+    "email-templates": "^5.0.4",
     "express": "^4.16.4",
     "googleapis": "^38.0.0",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "moment-timezone": "^0.5.23",
     "mongoose": "^5.4.19",
+    "nodemailer": "^6.1.0",
+    "nodemailer-sendgrid-transport": "^0.2.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "pug": "^2.0.3",
     "uniqid": "^5.0.3",
     "validator": "^10.11.0"
   },

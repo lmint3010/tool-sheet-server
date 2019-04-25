@@ -1,8 +1,14 @@
 const port = process.env.PORT || 3000
-const app = require('express')()
+const express = require('express')
+const app = express()
 const passport = require('passport')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const path = require('path')
+
+app.set('view engine', 'pug')
+app.set('views', './views')
+app.use('/assets', express.static(path.join(__dirname, 'assets')))
 
 require('dotenv').config()
 app.use(cors())
@@ -21,6 +27,15 @@ require('./utils/mongoose').connect(mongoUri)
 app.use(passport.initialize())
 require('./utils/passport')(passport)
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   app.get('/', (_, res) => res.send(`Server is running!</br>PORT ${port}!`))
 })
+
+app.get('/reset-password-test', (req, res) =>
+  res.render('reset-password', {
+    name: 'Lmint',
+    directLink: 'https://facebook.com',
+  })
+)
+
+server.timeout = 900000

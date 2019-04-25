@@ -1,0 +1,19 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    title Reset Password
+  body
+    link(rel="stylesheet", href="https://uiux.s3.amazonaws.com/style-guide/css/style-guide.css")
+    .card.is-centered
+      h2(style="font-size: 2rem").sg-icon.sg-icon-airplane
+      h2 DFO Content Tool
+      p Chào <strong>#{name}</strong>! Chúng tôi nhận được yêu cầu khôi phục mật khẩu của bạn
+      p Vui lòng truy cập liên kết bên dưới để khôi phục mật khẩu hoặc bỏ qua email này nếu yêu cầu đó không phải của bạn
+      h2
+        a(href=directLink target="_blank").btn.btn-secondary Truy cập liên kết
+      .alert.alert-beta
+        p(style="margin-bottom: 0")
+          | Liên kết chỉ có hiệu lực trong vòng 5 phút

@@ -1,9 +1,14 @@
 // Google Authenticate API
 const { authCTL } = require('./auth/authCTL')
 const { setToken } = require('./auth/setToken')
+
+// User API
 const { signup } = require('./users/signup')
 const { signin } = require('./users/signin')
 const { getall } = require('./users/all')
+const { resetPassword } = require('./users/resetPassword')
+const { renewPassword } = require('./users/renewPassword')
+const { validResetToken } = require('./users/validResetToken')
 
 // Spreadsheet API
 const { getSpreadsheetContent } = require('./tools/getSpreadsheetContent')
@@ -28,5 +33,8 @@ module.exports = {
     signup,
     signin,
     getall,
+    resetPassword,
+    renewPassword,
+    validResetToken,
   },
 }
