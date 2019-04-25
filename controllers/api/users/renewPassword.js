@@ -12,7 +12,10 @@ module.exports.renewPassword = async (req, res) => {
     user.password = newPasswordHashed
     user
       .save()
-      .then(() => {
+      .then(async () => {
+        await users.findByIdAndUpdate(userId, {
+          $set: { resetPasswordToken: '', resetPasswordTokenExpiration: '' },
+        })
         res.json({ renew: true })
       })
       .catch(() => {
