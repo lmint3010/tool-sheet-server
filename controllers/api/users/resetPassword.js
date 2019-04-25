@@ -1,6 +1,6 @@
 // Node build-in module
 const crypto = require('crypto')
-
+const { resetMail } = require('./resetMail')
 const Email = require('email-templates')
 const emailTemp = new Email()
 
@@ -36,13 +36,20 @@ module.exports.resetPassword = async (req, res) => {
         }/${userSaved._id}`
         const { email, name } = userSaved
 
-        emailTemp
-          .render('mars/html', { name: name, directLink })
-          .then(htmlContent => {
-            const sendMailCallback = () => res.json({ success: true })
-            sendGridTo(email, 'Reset Password', htmlContent, sendMailCallback)
-          })
-          .catch(console.error)
+        const sendMailCallback = () => res.json({ success: true })
+        sendGridTo(
+          email,
+          `Reset Password for ${name}`,
+          resetMail(name, directLink),
+          sendMailCallback
+        )
+
+        // emailTemp
+        // .render('mars/html', { name: name, directLink })
+        // .then(htmlContent => {
+        // console.log('Mail Temp', resetMail)
+        // })
+        // .catch(console.error)
       })
       .catch(err => console.log(err))
   })

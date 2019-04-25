@@ -1,17 +1,12 @@
+require('dotenv').config()
 const port = process.env.PORT || 3000
 const express = require('express')
 const app = express()
 const passport = require('passport')
 const cors = require('cors')
-const bodyParser = require('body-parser')
-const path = require('path')
-
-app.set('view engine', 'pug')
-app.set('views', './views')
-app.use('/assets', express.static(path.join(__dirname, 'assets')))
-
-require('dotenv').config()
 app.use(cors())
+
+const bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -30,12 +25,5 @@ require('./utils/passport')(passport)
 const server = app.listen(port, () => {
   app.get('/', (_, res) => res.send(`Server is running!</br>PORT ${port}!`))
 })
-
-app.get('/reset-password-test', (req, res) =>
-  res.render('reset-password', {
-    name: 'Lmint',
-    directLink: 'https://facebook.com',
-  })
-)
 
 server.timeout = 900000
