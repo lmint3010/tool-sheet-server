@@ -26,7 +26,7 @@ const userSchema = new Schema({
     expiry_date: String,
   },
   resetPasswordToken: String,
-  resetPasswordTokenExpiration: String
+  resetPasswordTokenExpiration: String,
 })
 
 module.exports = model('users', userSchema, 'users')

@@ -24,4 +24,4 @@ const translateSchema = new Schema({
   }
 })
 
-module.exports = model('translate', translateSchema, 'translate')
+// module.exports = model('translate', translateSchema, 'translate')

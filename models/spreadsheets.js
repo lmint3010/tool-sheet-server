@@ -36,12 +36,13 @@ const spreadsheetsSchema = new Schema({
   creator: {
     type: String,
   },
-  lastEditor: {
-    type: String,
-  },
   totalEnglishDocs: {
     type: Number,
     default: 0,
+  },
+  userLiked: {
+    type: [String],
+    default: [],
   },
 })
 

@@ -6,6 +6,8 @@ const {
   all,
   deleteSpreadsheet,
   syncinfo,
+  setDefaultSpreadsheet,
+  getWorkspaceData
 } = require('../../../controllers/api').spreadsheet
 
 // @path  POST /add
@@ -29,5 +31,11 @@ route.post('/delete', deleteSpreadsheet)
 
 // @path POST /api/sprsheet/syncinfo
 route.post('/syncinfo', syncinfo)
+
+// @path POST /api/sprsheet/setdefault
+route.post('/setdefault', setDefaultSpreadsheet)
+
+// @path POST /api/sprsheet/get-workspace-data
+route.post('/get-workspace-data', getWorkspaceData)
 
 module.exports = route

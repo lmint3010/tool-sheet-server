@@ -13,4 +13,4 @@ const credSchema = new Schema({
   }
 })
 
-module.exports = model('credetials', credSchema, 'credentials')
+// module.exports = model('credetials', credSchema, 'credentials')

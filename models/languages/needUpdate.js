@@ -28,4 +28,4 @@ const needUpdateSchema = new Schema({
   },
 })
 
-module.exports = model('needupdate', needUpdateSchema, 'needupdate')
+// module.exports = model('needupdate', needUpdateSchema, 'needupdate')

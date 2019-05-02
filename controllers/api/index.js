@@ -17,6 +17,8 @@ const { search } = require('./tools/search')
 const { all } = require('./tools/all')
 const { syncinfo } = require('./tools/syncinfo')
 const { deleteSpreadsheet } = require('./tools/deleteSpreadsheet')
+const { setDefaultSpreadsheet } = require('./tools/setDefaultSpreadsheet')
+const { getWorkspaceData } = require('./tools/getWorkspaceData')
 
 module.exports = {
   authCTL,
@@ -28,6 +30,8 @@ module.exports = {
     deleteSpreadsheet,
     syncinfo,
     all,
+    setDefaultSpreadsheet,
+    getWorkspaceData
   },
   users: {
     signup,

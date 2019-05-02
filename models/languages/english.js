@@ -30,4 +30,4 @@ const englishSchema = new Schema({
 
 englishSchema.index({ content: 1 })
 
-module.exports = model('english', englishSchema, 'english')
+// module.exports = model('english', englishSchema, 'english')
