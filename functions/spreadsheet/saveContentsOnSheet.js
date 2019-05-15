@@ -16,7 +16,7 @@ const saveContentsOnSheet = async (content, siteAlias, currentSheet) => {
   const languageList = sheetContent.shift()
 
   // Clear database before fetching data
-  await translation_model.deleteMany({ site: siteAlias })
+  // await translation_model.deleteMany({ site: siteAlias })
 
   await Promise.all(
     sheetContent.map(async row => {
