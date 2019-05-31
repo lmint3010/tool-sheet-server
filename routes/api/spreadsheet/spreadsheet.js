@@ -1,13 +1,15 @@
+const schedule = require('node-schedule')
 const route = require('express').Router()
 const {
   newSprsheet,
   getSpreadsheetContent,
   search,
   all,
+  clean,
   deleteSpreadsheet,
   syncinfo,
   setDefaultSpreadsheet,
-  getWorkspaceData
+  getWorkspaceData,
 } = require('../../../controllers/api').spreadsheet
 
 // @path  POST /add
@@ -25,6 +27,7 @@ route.post('/search', search)
 // @path POST /all
 // @desc Find Translation for language
 route.get('/all', all)
+schedule.scheduleJob('0 10 * * *', clean)
 
 // @path POST /api/sprsheet/delete
 route.post('/delete', deleteSpreadsheet)
