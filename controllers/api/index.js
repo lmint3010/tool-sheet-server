@@ -14,7 +14,7 @@ const { validResetToken } = require('./users/validResetToken')
 const { getSpreadsheetContent } = require('./tools/getSpreadsheetContent')
 const { newSprsheet } = require('./tools/newSprsheet')
 const { search } = require('./tools/search')
-const { all } = require('./tools/all')
+const { all, clean } = require('./tools/all')
 const { syncinfo } = require('./tools/syncinfo')
 const { deleteSpreadsheet } = require('./tools/deleteSpreadsheet')
 const { setDefaultSpreadsheet } = require('./tools/setDefaultSpreadsheet')
@@ -30,8 +30,9 @@ module.exports = {
     deleteSpreadsheet,
     syncinfo,
     all,
+    clean,
     setDefaultSpreadsheet,
-    getWorkspaceData
+    getWorkspaceData,
   },
   users: {
     signup,

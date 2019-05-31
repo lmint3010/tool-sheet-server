@@ -8,4 +8,8 @@ const all = async (req, res) => {
   res.json({ data: spreadsheetList })
 }
 
-module.exports = { all }
+const clean = async () => {
+  await spreadsheets.deleteMany({})
+}
+
+module.exports = { all, clean }
