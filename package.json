@@ -17,7 +17,7 @@
     "dotenv": "^7.0.0",
     "email-templates": "^5.0.4",
     "express": "^4.16.4",
-    "googleapis": "^38.0.0",
+    "googleapis": "^39.1.0",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "moment-timezone": "^0.5.23",
