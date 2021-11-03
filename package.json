@@ -29,7 +29,7 @@
     "passport-jwt": "^4.0.0",
     "pug": "^2.0.3",
     "uniqid": "^5.0.3",
-    "validator": "^10.11.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
