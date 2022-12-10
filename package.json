@@ -16,7 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^7.0.0",
     "email-templates": "^5.0.4",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "googleapis": "^38.0.0",
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
